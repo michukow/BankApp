@@ -15,26 +15,30 @@ class User:
 def login():
     while True:
         try:
-            login=input("Inser a username: ")
-            if login=="":
+            username=input("Inser a username: ")
+            if not username:
                 print("The username can not be empty.")
                 continue
-            else:
-                try:
-                    with open("data.json","r",encoding="utf-8") as file:
-                        data=json.load(file)
-                        for user in data:
-                            if user["user"] == login:
-                                print("User was found.")
-                                return login
-                                continue
-                            else:
-                                print("Not found.")
-                except FileNotFoundError:
-                    print("File not found.")
-                    data=[]
-        except ValueError:
-            print("An error occured. Try again!")
+
+            try:
+                with open("data.json","r",encoding="utf-8") as file:
+                    data=json.load(file)
+                for user in data:
+                    if user["user"]==username:
+                        print("User was found.")
+                        return user 
+
+                    print("Not found.")
+                    return None
+
+            except FileNotFoundError:
+                print("File not found.")
+                data=[]
+                return None
+
+        except FileNotFoundError:
+            print("File was not found.")
+            return None
 
 def create():
     print("Creating account...")
@@ -42,18 +46,21 @@ def create():
 def main():
     print("Hello! Welcome at Bank!")
     print("Select an activity: ")
-    print("1 - Login in")
-    print("2 - Create new account")
-    print()
 
-    choice=str(input("Choose option: "))
+    while True:
+        print()
+        print("1 - Login in")
+        print("2 - Create new account")
+        print()
 
-    if choice=="1":
-        login()
-    elif choice=="2":
-        create()
-    else:
-        print("Select valid option.")
+        choice=str(input("Choose option: "))
+
+        if choice=="1":
+            login()
+        elif choice=="2":
+            create()
+        else:
+            print("Select valid option.")
 
 
 if __name__ == "__main__":
