@@ -13,32 +13,31 @@ class User:
         return self.__dict__
 
 def login():
-    while True:
-        try:
-            username=input("Inser a username: ")
-            if not username:
-                print("The username can not be empty.")
-                continue
+    try:
+        with open("data.json", "r", encoding="utf-8") as file:
+            data=json.load(file)
+    except FileNotFoundError:
+        print("File not found.")
+        return None
 
-            try:
-                with open("data.json","r",encoding="utf-8") as file:
-                    data=json.load(file)
-                for user in data:
-                    if user["user"]==username:
-                        print("User was found.")
-                        return user 
+    username=input("Insert username: ").strip()
+    if not username:
+        print("Username cannot be empty.")
+        return None
 
-                    print("Not found.")
-                    return None
+    for user in data:
+        if user["user"]==username:
+            password=input("Insert password: ").strip()
 
-            except FileNotFoundError:
-                print("File not found.")
-                data=[]
+            if user["password"]==password:
+                print("Login successful.")
+                return user
+            else:
+                print("Invalid password.")
                 return None
 
-        except FileNotFoundError:
-            print("File was not found.")
-            return None
+    print("Username was not found.")
+    return None
 
 def create():
     print("Creating account...")
