@@ -1,15 +1,14 @@
 [
-	{
+    {
         "id_number": 1,
         "user": "michau",
         "password": "123",
-        "money":100
+        "money": 50.0
     },
-
     {
         "id_number": 2,
         "user": "maja",
         "password": "456",
-        "money":200
+        "money": 200
     }
 ]

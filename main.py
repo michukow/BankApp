@@ -31,7 +31,8 @@ def login():
 
             if user["password"]==password:
                 print("Login successful.")
-                return user
+                user_menu(username)
+                return username
             else:
                 print("Invalid password.")
                 return None
@@ -39,8 +40,51 @@ def login():
     print("Username was not found.")
     return None
 
-def create():
-    print("Creating account...")
+#When user is logged
+def user_menu(username):
+    print("Select an activity: ")
+    while True:
+        print()
+        print("1 - Withdraw")
+        print("2 - Exit")
+        print()
+
+        choice=str(input("Choose option: "))
+
+        if choice=="1":
+            withdraw(username)
+        elif choice=="2":
+            break
+        else:
+            print("Select valid option.")
+
+#Withdraw
+def withdraw(username):
+    try:
+        with open("data.json", "r", encoding="utf-8") as file:
+            data=json.load(file)
+    except FileNotFoundError:
+        print("File not found.")
+        return None
+
+    withdraw_value=float(input("Insert value to withdraw: ").strip())
+    if not username or withdraw_value<=0:
+        print("Insert valid value!")
+        return None
+
+    for user in data:
+        if user["user"]==username:
+            if user["money"]>=withdraw_value:
+                user["money"]-=withdraw_value
+
+                with open("data.json","w",encoding="utf-8") as file:
+                    json.dump(data,file,indent=4)
+
+                print(f"Money withdrawn. Current balance: {user['money']}")
+                return
+            else:
+                print("Not enough money.")
+                return
 
 def main():
     print("Hello! Welcome at Bank!")
@@ -49,7 +93,7 @@ def main():
     while True:
         print()
         print("1 - Login in")
-        print("2 - Create new account")
+        print("2 - Exit")
         print()
 
         choice=str(input("Choose option: "))
@@ -57,7 +101,7 @@ def main():
         if choice=="1":
             login()
         elif choice=="2":
-            create()
+            break
         else:
             print("Select valid option.")
 
