@@ -1,6 +1,6 @@
 #BankApp
 
-import json
+import json, hashlib
 
 class User:
     def __init__(self,id_number,login,password,money=0):
@@ -29,7 +29,7 @@ def login():
         if user["user"]==username:
             password=input("Insert password: ").strip()
 
-            if user["password"]==password:
+            if user["password"]==hashlib.sha256(password.encode()).hexdigest():
                 print("Login successful.")
                 user_menu(username)
                 return username
@@ -89,6 +89,7 @@ def withdraw(username):
                 print("Not enough money.")
                 return
 
+#change password
 def change_password(username):
     try:
         with open("data.json", "r", encoding="utf-8") as file:
@@ -105,7 +106,7 @@ def change_password(username):
 
     for user in data:
         if user["user"]==username:
-            user["password"] = changed_password
+            user["password"]=hashlib.sha256(changed_password.encode()).hexdigest()
             with open("data.json","w",encoding="utf-8") as file:
                 json.dump(data,file,indent=4)
             print("Password changed successfully.")
@@ -129,7 +130,6 @@ def main():
             break
         else:
             print("Select valid option.")
-
 
 if __name__ == "__main__":
     main()

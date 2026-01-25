@@ -2,13 +2,13 @@
     {
         "id_number": 1,
         "user": "michau",
-        "password": "345",
+        "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
         "money": 50.0
     },
     {
         "id_number": 2,
         "user": "maja",
-        "password": "456",
+        "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
         "money": 200
     }
 ]
