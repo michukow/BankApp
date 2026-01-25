@@ -40,13 +40,14 @@ def login():
     print("Username was not found.")
     return None
 
-#When user is logged
+#When user is logged ...
 def user_menu(username):
     print("Select an activity: ")
     while True:
         print()
         print("1 - Withdraw")
-        print("2 - Exit")
+        print("2 - Change password")
+        print("3 - Log out")
         print()
 
         choice=str(input("Choose option: "))
@@ -54,6 +55,8 @@ def user_menu(username):
         if choice=="1":
             withdraw(username)
         elif choice=="2":
+            change_password(username)
+        elif choice=="3":
             break
         else:
             print("Select valid option.")
@@ -85,6 +88,28 @@ def withdraw(username):
             else:
                 print("Not enough money.")
                 return
+
+def change_password(username):
+    try:
+        with open("data.json", "r", encoding="utf-8") as file:
+            data=json.load(file)
+    except FileNotFoundError:
+        print("File not found.")
+        return None
+
+    changed_password=input("Insert new password: ").strip()
+
+    if not changed_password:
+        print("Insert valid password!")
+        return None
+
+    for user in data:
+        if user["user"]==username:
+            user["password"] = changed_password
+            with open("data.json","w",encoding="utf-8") as file:
+                json.dump(data,file,indent=4)
+            print("Password changed successfully.")
+            return
 
 def main():
     print("Hello! Welcome at Bank!")
