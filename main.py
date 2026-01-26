@@ -3,9 +3,8 @@
 import json, hashlib
 
 class User:
-    def __init__(self,id_number,login,password,money=0):
-        self.id_number=id_number
-        self.login=login
+    def __init__(self,username,password,money):
+        self.username=username
         self.password=password
         self.money=money
 
@@ -26,7 +25,7 @@ def login():
         return None
 
     for user in data:
-        if user["user"]==username:
+        if user["username"]==username:
             password=input("Insert password: ").strip()
 
             if user["password"]==hashlib.sha256(password.encode()).hexdigest():
@@ -76,7 +75,7 @@ def withdraw(username):
         return None
 
     for user in data:
-        if user["user"]==username:
+        if user["username"]==username:
             if user["money"]>=withdraw_value:
                 user["money"]-=withdraw_value
 
@@ -105,12 +104,81 @@ def change_password(username):
         return None
 
     for user in data:
-        if user["user"]==username:
+        if user["username"]==username:
             user["password"]=hashlib.sha256(changed_password.encode()).hexdigest()
             with open("data.json","w",encoding="utf-8") as file:
                 json.dump(data,file,indent=4)
             print("Password changed successfully.")
             return
+
+#create new account
+def register():
+    try:
+        with open("data.json", "r", encoding="utf-8") as file:
+            data=json.load(file)
+    except FileNotFoundError:
+        print("File not found.")
+        return None
+
+    #username
+    while True:
+        try:
+            new_username=input("Insert a username: ")
+            if not new_username:
+                print("The username can not be empty.")
+                continue
+            if len(new_username)<=3:
+                print("Username is too short. Try logner one - more than 3 chars.")
+                continue
+            if any(user["username"] == new_username for user in data):
+                print("Username already exists.")
+                continue
+            break
+        except ValueError:
+            print("An error occured. Try again!")
+
+    #password
+    while True:
+        try:
+            new_password=input("Insert a password: ")
+            if not new_password:
+                print("The password should not be empty.")
+                continue
+            if len(new_password)<=3:
+                print("The length of password should be more than 3.")
+                continue
+            break
+        except ValueError:
+            print("An error occured. Try again!")
+
+    #money
+    while True:
+        try:
+            new_money=float(input("Insert amount of money: "))
+            if not new_money or new_money<0:
+                print("You should deposit some money")
+                continue
+            break
+        except ValueError:
+            print("An error occured. Try again!")
+    
+    #creating account
+    account=User(new_username,hashlib.sha256(new_password.encode()).hexdigest(),new_money)
+
+    try:
+        with open("data.json","r",encoding="utf-8") as file:
+            data=json.load(file)
+
+    except FileNotFoundError:
+        print("File not found.")
+        return None
+
+    data.append(account.to_dict())
+
+    with open("data.json","w",encoding="utf-8") as file:
+        json.dump(data,file,indent=4,ensure_ascii=False)
+
+    print(f"New account was added successfully!")
 
 def main():
     print("Hello! Welcome at Bank!")
@@ -119,7 +187,8 @@ def main():
     while True:
         print()
         print("1 - Login in")
-        print("2 - Exit")
+        print("2 - Register account")
+        print("3 - Exit")
         print()
 
         choice=str(input("Choose option: "))
@@ -127,6 +196,8 @@ def main():
         if choice=="1":
             login()
         elif choice=="2":
+            register()
+        elif choice=="3":
             break
         else:
             print("Select valid option.")
