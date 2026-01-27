@@ -2,11 +2,43 @@
     {
         "username": "michau",
         "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
-        "money": 50.0
+        "money": 300.0,
+        "transactions": 
+        [
+        {
+          "type": "deposit",
+          "amount": 500,
+          "date": "2026-01-28 18:40",
+          "balance_after": 1000
+        },
+
+        {
+          "type": "withdraw",
+          "amount": 200,
+          "date": "2026-01-29 09:15",
+          "balance_after": 800
+        }
+        ]
     },
     {
         "username": "maja",
         "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
-        "money": 200
+        "money": -50.0,
+        "transactions": 
+        [
+        {
+          "type": "deposit",
+          "amount": 150,
+          "date": "2026-01-28 09:43",
+          "balance_after": 1000
+        },
+
+        {
+          "type": "withdraw",
+          "amount": 200,
+          "date": "2026-01-29 09:21",
+          "balance_after": 800
+        }
+        ]
     }
 ]

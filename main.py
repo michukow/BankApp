@@ -1,12 +1,14 @@
 #BankApp
 
 import json, hashlib
+from datetime import datetime
 
 class User:
-    def __init__(self,username,password,money):
+    def __init__(self,username,password,money,transactions=[]):
         self.username=username
         self.password=password
         self.money=money
+        self.transactions=transactions
 
     def to_dict(self):
         return self.__dict__
@@ -96,6 +98,7 @@ def withdraw(username):
                 print("Not enough money.")
                 return
 
+#deposit
 def deposit(username):
     try:
         with open("data.json", "r", encoding="utf-8") as file:
