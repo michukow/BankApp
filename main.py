@@ -89,6 +89,18 @@ def withdraw(username):
             if user["money"]>=withdraw_value:
                 user["money"]-=withdraw_value
 
+                transaction={
+                    "type": "withdraw",
+                    "amount": withdraw_value,
+                    "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    "balance_after": user["money"]
+                }
+
+                if "transactions" not in user:
+                    user["transactions"]=[]
+
+                user["transactions"].append(transaction)
+
                 with open("data.json","w",encoding="utf-8") as file:
                     json.dump(data,file,indent=4)
 
@@ -120,6 +132,18 @@ def deposit(username):
     for user in data:
         if user["username"]==username:
             user["money"]+=money_to_deposit
+
+            transaction={
+                "type": "deposit",
+                "amount": money_to_deposit,
+                "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                "balance_after": user["money"]
+            }
+
+            if "transactions" not in user:
+                user["transactions"]=[]
+
+            user["transactions"].append(transaction)
 
             with open("data.json","w",encoding="utf-8") as file:
                 json.dump(data,file,indent=4)
