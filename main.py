@@ -69,10 +69,15 @@ def withdraw(username):
         print("File not found.")
         return None
 
-    withdraw_value=float(input("Insert value to withdraw: ").strip())
-    if not username or withdraw_value<=0:
-        print("Insert valid value!")
-        return None
+    while True:
+        try:
+            withdraw_value=float(input("Insert value to withdraw: ").strip())
+            if not username or withdraw_value<=0:
+                print("Insert valid value!")
+                continue
+            break
+        except ValueError:
+            print("An error occured. Try again.")
 
     for user in data:
         if user["username"]==username:
