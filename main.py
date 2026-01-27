@@ -46,7 +46,8 @@ def user_menu(username):
         print()
         print("1 - Withdraw")
         print("2 - Change password")
-        print("3 - Log out")
+        print("3 - Deposit money")
+        print("4 - Log out")
         print()
 
         choice=str(input("Choose option: "))
@@ -56,6 +57,8 @@ def user_menu(username):
         elif choice=="2":
             change_password(username)
         elif choice=="3":
+            deposit(username)
+        elif choice=="4":
             break
         else:
             print("Select valid option.")
@@ -92,6 +95,34 @@ def withdraw(username):
             else:
                 print("Not enough money.")
                 return
+
+def deposit(username):
+    try:
+        with open("data.json", "r", encoding="utf-8") as file:
+            data=json.load(file)
+    except FileNotFoundError:
+        print("File not found.")
+        return None
+
+    while True:
+        try:
+            money_to_deposit=float(input("Insert a money to deposit: "))
+            if not money_to_deposit or money_to_deposit<=0:
+                print("Please, insert valid amount.")
+                continue
+            break
+        except ValueError:
+            print("An error occured. Try again.")
+
+    for user in data:
+        if user["username"]==username:
+            user["money"]+=money_to_deposit
+
+            with open("data.json","w",encoding="utf-8") as file:
+                json.dump(data,file,indent=4)
+
+            print(f"Money deposited. Current balance: {user['money']}")
+            return
 
 #change password
 def change_password(username):
