@@ -15,7 +15,7 @@ class User:
 
 def login():
     try:
-        with open("data.json", "r", encoding="utf-8") as file:
+        with open("data.json","r",encoding="utf-8") as file:
             data=json.load(file)
     except FileNotFoundError:
         print("File not found.")
@@ -71,7 +71,7 @@ def user_menu(username):
 #Withdraw
 def withdraw(username):
     try:
-        with open("data.json", "r", encoding="utf-8") as file:
+        with open("data.json","r",encoding="utf-8") as file:
             data=json.load(file)
     except FileNotFoundError:
         print("File not found.")
@@ -116,7 +116,7 @@ def withdraw(username):
 #deposit
 def deposit(username):
     try:
-        with open("data.json", "r", encoding="utf-8") as file:
+        with open("data.json","r",encoding="utf-8") as file:
             data=json.load(file)
     except FileNotFoundError:
         print("File not found.")
@@ -157,7 +157,7 @@ def deposit(username):
 #change password
 def change_password(username):
     try:
-        with open("data.json", "r", encoding="utf-8") as file:
+        with open("data.json","r",encoding="utf-8") as file:
             data=json.load(file)
     except FileNotFoundError:
         print("File not found.")
@@ -177,9 +177,10 @@ def change_password(username):
             print("Password changed successfully.")
             return
 
+#show history of transaction
 def show_history(username):
     try:
-        with open("data.json", "r", encoding="utf-8") as file:
+        with open("data.json","r",encoding="utf-8") as file:
             data=json.load(file)
     except FileNotFoundError:
         print("File not found.")
@@ -202,6 +203,19 @@ def show_history(username):
                     amount=transaction["amount"]
                     print(f"{date} | {type} | {amount}")
                 return None
+
+#balance
+def balance(username):
+    try:
+        with open("data.json","r",encoding="utf-8") as file:
+            data=json.load(file)
+    except FileNotFoundError:
+        print("File not found.")
+        return None
+
+    for user in data:
+        if user["username"]==username:
+            print(f"Balance: {user["money"]}")
 
 #create new account
 def register():
