@@ -47,8 +47,8 @@ def user_menu(username):
     while True:
         print()
         print("1 - Withdraw")
-        print("2 - Change password")
-        print("3 - Deposit money")
+        print("2 - Deposit")
+        print("3 - Change password")
         print("4 - Log out")
         print()
 
@@ -57,9 +57,9 @@ def user_menu(username):
         if choice=="1":
             withdraw(username)
         elif choice=="2":
-            change_password(username)
-        elif choice=="3":
             deposit(username)
+        elif choice=="3":
+            change_password(username)
         elif choice=="4":
             break
         else:
