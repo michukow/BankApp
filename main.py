@@ -48,8 +48,9 @@ def user_menu(username):
         print()
         print("1 - Withdraw")
         print("2 - Deposit")
-        print("3 - Change password")
-        print("4 - Log out")
+        print("3 - Show transactions history")
+        print("4 - Change password")
+        print("5 - Log out")
         print()
 
         choice=str(input("Choose option: "))
@@ -59,8 +60,10 @@ def user_menu(username):
         elif choice=="2":
             deposit(username)
         elif choice=="3":
-            change_password(username)
+            show_history(username)
         elif choice=="4":
+            change_password(username)
+        elif choice=="5":
             break
         else:
             print("Select valid option.")
@@ -173,6 +176,32 @@ def change_password(username):
                 json.dump(data,file,indent=4)
             print("Password changed successfully.")
             return
+
+def show_history(username):
+    try:
+        with open("data.json", "r", encoding="utf-8") as file:
+            data=json.load(file)
+    except FileNotFoundError:
+        print("File not found.")
+        return None
+
+    for user in data:
+        if user["username"]==username:
+            transactions=user.get("transactions",[])
+
+            if not transactions:
+                print("Transactions list is empty.")
+                return
+
+            else:
+                print("DATE | TYPE | AMOUNT")
+                print("----------------------")
+                for transaction in transactions:
+                    date=transaction["date"]
+                    type=transaction["type"]
+                    amount=transaction["amount"]
+                    print(f"{date} | {type} | {amount}")
+                return None
 
 #create new account
 def register():
