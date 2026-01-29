@@ -48,9 +48,10 @@ def user_menu(username):
         print()
         print("1 - Withdraw")
         print("2 - Deposit")
-        print("3 - Show transactions history")
-        print("4 - Change password")
-        print("5 - Log out")
+        print("3 - Show balance")
+        print("4 - Show transactions history")
+        print("5 - Change password")
+        print("6 - Log out")
         print()
 
         choice=str(input("Choose option: "))
@@ -60,10 +61,12 @@ def user_menu(username):
         elif choice=="2":
             deposit(username)
         elif choice=="3":
-            show_history(username)
+            balance(username)
         elif choice=="4":
-            change_password(username)
+            show_history(username)
         elif choice=="5":
+            change_password(username)
+        elif choice=="6":
             break
         else:
             print("Select valid option.")
