@@ -1,6 +1,6 @@
 #BankApp
 
-import json, hashlib, string
+import json,hashlib,string
 from datetime import datetime
 
 class User:
@@ -13,14 +13,18 @@ class User:
     def to_dict(self):
         return self.__dict__
 
-def login():
+def load():
     try:
         with open("data.json","r",encoding="utf-8") as file:
             data=json.load(file)
+            return data
     except FileNotFoundError:
         print("File not found.")
         return None
 
+def login():
+    data=load()
+    
     username=input("Insert username: ").strip()
     if not username:
         print("Username cannot be empty.")
@@ -73,12 +77,7 @@ def user_menu(username):
 
 #Withdraw
 def withdraw(username):
-    try:
-        with open("data.json","r",encoding="utf-8") as file:
-            data=json.load(file)
-    except FileNotFoundError:
-        print("File not found.")
-        return None
+    data=load()
 
     while True:
         try:
@@ -118,12 +117,7 @@ def withdraw(username):
 
 #deposit
 def deposit(username):
-    try:
-        with open("data.json","r",encoding="utf-8") as file:
-            data=json.load(file)
-    except FileNotFoundError:
-        print("File not found.")
-        return None
+    data=load()
 
     while True:
         try:
@@ -164,17 +158,13 @@ def change_password(username):
     digits="1234567890"
     special="!@#$%^&*()-_+=|,./';[]{}:?><"
 
-    try:
-        with open("data.json","r",encoding="utf-8") as file:
-            data=json.load(file)
-    except FileNotFoundError:
-        print("File not found.")
-        return None
+    data=load()
 
     print("Rule of changing password")
     print("1. The length of new password shuld be up to 8.")
     print("2. New password should contain at least one: small letter, great letter, digit and special character.")
     print("3. Keep your password in safe place.")
+    print()
 
 #password for user michau: IamBoomer234!
 
@@ -203,7 +193,7 @@ def change_password(username):
 
     for user in data:
         if user["username"]==username:
-            user["password"]=hashlib.sha256(changed_password.encode()).hexdigest()
+            user["password"]=hashlib.sha256(new_password.encode()).hexdigest()
             with open("data.json","w",encoding="utf-8") as file:
                 json.dump(data,file,indent=4)
             print("Password changed successfully.")
@@ -211,12 +201,7 @@ def change_password(username):
 
 #show history of transaction
 def show_history(username):
-    try:
-        with open("data.json","r",encoding="utf-8") as file:
-            data=json.load(file)
-    except FileNotFoundError:
-        print("File not found.")
-        return None
+    data=load()
 
     for user in data:
         if user["username"]==username:
@@ -238,12 +223,7 @@ def show_history(username):
 
 #balance
 def balance(username):
-    try:
-        with open("data.json","r",encoding="utf-8") as file:
-            data=json.load(file)
-    except FileNotFoundError:
-        print("File not found.")
-        return None
+    load()
 
     for user in data:
         if user["username"]==username:
@@ -251,12 +231,12 @@ def balance(username):
 
 #create new account
 def register():
-    try:
-        with open("data.json", "r", encoding="utf-8") as file:
-            data=json.load(file)
-    except FileNotFoundError:
-        print("File not found.")
-        return None
+    small_letters=string.ascii_lowercase
+    great_letters=string.ascii_uppercase
+    digits="1234567890"
+    special="!@#$%^&*()-_+=|,./';[]{}:?><"
+
+    data=load()
 
     #username
     while True:
@@ -278,16 +258,26 @@ def register():
     #password
     while True:
         try:
-            new_password=input("Insert a password: ")
-            if not new_password:
-                print("The password should not be empty.")
+            new_password=input("Insert new password: ").strip()
+            if len(new_password)<=8:
+                print("The password is too short. Try again!")
                 continue
-            if len(new_password)<=3:
-                print("The length of password should be more than 3.")
+            if not any(char in special for char in new_password):
+                print("The password does not contain special characters. Try again.")
+                continue
+            if not any(char in small_letters for char in new_password):
+                print("The password does not contain small letters. Try again.")
+                continue
+            if not any(char in great_letters for char in new_password):
+                print("The password does not contain great letters. Try again.")
+                continue
+            if not any(char in digits for char in new_password):
+                print("The password does not contain digits. Try again.")
                 continue
             break
-        except ValueError:
+        except:
             print("An error occured. Try again!")
+            return None
 
     #money
     while True:
@@ -303,13 +293,7 @@ def register():
     #creating account
     account=User(new_username,hashlib.sha256(new_password.encode()).hexdigest(),new_money)
 
-    try:
-        with open("data.json","r",encoding="utf-8") as file:
-            data=json.load(file)
-
-    except FileNotFoundError:
-        print("File not found.")
-        return None
+    data=load()
 
     data.append(account.to_dict())
 
