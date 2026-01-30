@@ -13,9 +13,9 @@ class User:
     def to_dict(self):
         return self.__dict__
 
-def load():
+def load(file_name):
     try:
-        with open("data.json","r",encoding="utf-8") as file:
+        with open(file_name,"r",encoding="utf-8") as file:
             data=json.load(file)
             return data
     except FileNotFoundError:
@@ -23,8 +23,8 @@ def load():
         return None
 
 def login():
-    data=load()
-    
+    data=load("data.json")
+
     username=input("Insert username: ").strip()
     if not username:
         print("Username cannot be empty.")
@@ -77,7 +77,7 @@ def user_menu(username):
 
 #Withdraw
 def withdraw(username):
-    data=load()
+    data=load("data.json")
 
     while True:
         try:
@@ -117,7 +117,7 @@ def withdraw(username):
 
 #deposit
 def deposit(username):
-    data=load()
+    data=load("data.json")
 
     while True:
         try:
@@ -158,7 +158,7 @@ def change_password(username):
     digits="1234567890"
     special="!@#$%^&*()-_+=|,./';[]{}:?><"
 
-    data=load()
+    data=load("data.json")
 
     print("Rule of changing password")
     print("1. The length of new password shuld be up to 8.")
@@ -201,7 +201,7 @@ def change_password(username):
 
 #show history of transaction
 def show_history(username):
-    data=load()
+    data=load("data.json")
 
     for user in data:
         if user["username"]==username:
@@ -236,7 +236,7 @@ def register():
     digits="1234567890"
     special="!@#$%^&*()-_+=|,./';[]{}:?><"
 
-    data=load()
+    data=load("data.json")
 
     #username
     while True:
@@ -293,7 +293,7 @@ def register():
     #creating account
     account=User(new_username,hashlib.sha256(new_password.encode()).hexdigest(),new_money)
 
-    data=load()
+    data=load("data.json")
 
     data.append(account.to_dict())
 

@@ -1,14 +1,20 @@
 [
     {
         "username": "michau",
-        "password": "611c7f260277c446ba7d3f737e46ed129ad41b2b88de64bc467f269c6bd24745", 
-        "money": 100.0,
+        "password": "611c7f260277c446ba7d3f737e46ed129ad41b2b88de64bc467f269c6bd24745",
+        "money": 50.0,
         "transactions": [
             {
                 "type": "deposit",
                 "amount": 50.0,
                 "date": "2026-01-28 00:10",
                 "balance_after": 100.0
+            },
+            {
+                "type": "withdraw",
+                "amount": 50.0,
+                "date": "2026-01-30 22:05",
+                "balance_after": 50.0
             }
         ]
     },
