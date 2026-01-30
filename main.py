@@ -1,6 +1,6 @@
 #BankApp
 
-import json, hashlib
+import json, hashlib, string
 from datetime import datetime
 
 class User:
@@ -159,6 +159,11 @@ def deposit(username):
 
 #change password
 def change_password(username):
+    small_letters=string.ascii_lowercase
+    great_letters=string.ascii_uppercase
+    digits="1234567890"
+    special="!@#$%^&*()-_+=|,./';[]{}:?><"
+
     try:
         with open("data.json","r",encoding="utf-8") as file:
             data=json.load(file)
@@ -166,11 +171,35 @@ def change_password(username):
         print("File not found.")
         return None
 
-    changed_password=input("Insert new password: ").strip()
+    print("Rule of changing password")
+    print("1. The length of new password shuld be up to 8.")
+    print("2. New password should contain at least one: small letter, great letter, digit and special character.")
+    print("3. Keep your password in safe place.")
 
-    if not changed_password:
-        print("Insert valid password!")
-        return None
+#password for user michau: IamBoomer234!
+
+    while True:
+        try:
+            changed_password=input("Insert new password: ").strip()
+            if len(changed_password)<=8:
+                print("The password is too short. Try again!")
+                continue
+            if not any(char in special for char in changed_password):
+                print("The password does not contain special characters. Try again.")
+                continue
+            if not any(char in small_letters for char in changed_password):
+                print("The password does not contain small letters. Try again.")
+                continue
+            if not any(char in great_letters for char in changed_password):
+                print("The password does not contain great letters. Try again.")
+                continue
+            if not any(char in digits for char in changed_password):
+                print("The password does not contain digits. Try again.")
+                continue
+            break
+        except:
+            print("An error occured. Try again!")
+            return None
 
     for user in data:
         if user["username"]==username:
@@ -239,7 +268,7 @@ def register():
             if len(new_username)<=3:
                 print("Username is too short. Try logner one - more than 3 chars.")
                 continue
-            if any(user["username"] == new_username for user in data):
+            if any(user["username"]==new_username for user in data):
                 print("Username already exists.")
                 continue
             break
