@@ -198,7 +198,7 @@ def change_password(username):
 
     for user in data:
         if user["username"]==username:
-            user["password"]=hashlib.sha256(new_password.encode()).hexdigest()
+            user["password"]=hashlib.sha256(changed_password.encode()).hexdigest()
             save("data.json",data)
             print("Password changed successfully.")
             return
@@ -231,7 +231,7 @@ def balance(username):
 
     for user in data:
         if user["username"]==username:
-            print(f"Balance: {user["money"]}")
+            print(f"Balance: {user['money']}")
 
 #create new account
 def register():
