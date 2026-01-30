@@ -22,6 +22,13 @@ def load(file_name):
         print("File not found.")
         return None
 
+def save(file_name,info):
+    try:
+        with open(file_name,"w",encoding="utf-8") as file:
+            json.dump(info,file,indent=4,ensure_ascii=False)
+    except FileNotFoundError:
+        print("File not found")
+
 def login():
     data=load("data.json")
 
@@ -106,8 +113,7 @@ def withdraw(username):
 
                 user["transactions"].append(transaction)
 
-                with open("data.json","w",encoding="utf-8") as file:
-                    json.dump(data,file,indent=4)
+                save("data.json",data)
 
                 print(f"Money withdrawn. Current balance: {user['money']}")
                 return
@@ -145,8 +151,7 @@ def deposit(username):
 
             user["transactions"].append(transaction)
 
-            with open("data.json","w",encoding="utf-8") as file:
-                json.dump(data,file,indent=4)
+            save("data.json",data)
 
             print(f"Money deposited. Current balance: {user['money']}")
             return
@@ -194,8 +199,7 @@ def change_password(username):
     for user in data:
         if user["username"]==username:
             user["password"]=hashlib.sha256(new_password.encode()).hexdigest()
-            with open("data.json","w",encoding="utf-8") as file:
-                json.dump(data,file,indent=4)
+            save("data.json",data)
             print("Password changed successfully.")
             return
 
@@ -223,7 +227,7 @@ def show_history(username):
 
 #balance
 def balance(username):
-    load()
+    data=load("data.json")
 
     for user in data:
         if user["username"]==username:
@@ -297,8 +301,7 @@ def register():
 
     data.append(account.to_dict())
 
-    with open("data.json","w",encoding="utf-8") as file:
-        json.dump(data,file,indent=4,ensure_ascii=False)
+    save("data.json",data)
 
     print(f"New account was added successfully!")
 
