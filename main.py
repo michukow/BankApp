@@ -4,11 +4,11 @@ import json,hashlib,string
 from datetime import datetime
 
 class User:
-    def __init__(self,username,password,money,transactions=[]):
+    def __init__(self,username,password,money,transactions=None):
         self.username=username
         self.password=password
         self.money=money
-        self.transactions=transactions
+        self.transactions=transactions or []
 
     def to_dict(self):
         return self.__dict__
@@ -30,7 +30,7 @@ def save(file_name,info):
         print("File not found")
 
 def login():
-    data=load("data.json")
+    data=load("data.json") or []
 
     username=input("Insert username: ").strip()
     if not username:
@@ -84,7 +84,7 @@ def user_menu(username):
 
 #Withdraw
 def withdraw(username):
-    data=load("data.json")
+    data=load("data.json") or []
 
     while True:
         try:
@@ -123,7 +123,7 @@ def withdraw(username):
 
 #deposit
 def deposit(username):
-    data=load("data.json")
+    data=load("data.json") or []
 
     while True:
         try:
@@ -163,10 +163,10 @@ def change_password(username):
     digits="1234567890"
     special="!@#$%^&*()-_+=|,./';[]{}:?><"
 
-    data=load("data.json")
+    data=load("data.json") or []
 
     print("Rule of changing password")
-    print("1. The length of new password shuld be up to 8.")
+    print("1. Password must be longer than 8 characters.")
     print("2. New password should contain at least one: small letter, great letter, digit and special character.")
     print("3. Keep your password in safe place.")
     print()
@@ -205,7 +205,7 @@ def change_password(username):
 
 #show history of transaction
 def show_history(username):
-    data=load("data.json")
+    data=load("data.json") or []
 
     for user in data:
         if user["username"]==username:
@@ -227,7 +227,7 @@ def show_history(username):
 
 #balance
 def balance(username):
-    data=load("data.json")
+    data=load("data.json") or []
 
     for user in data:
         if user["username"]==username:
@@ -240,7 +240,7 @@ def register():
     digits="1234567890"
     special="!@#$%^&*()-_+=|,./';[]{}:?><"
 
-    data=load("data.json")
+    data=load("data.json") or []
 
     #username
     while True:
@@ -296,8 +296,6 @@ def register():
     
     #creating account
     account=User(new_username,hashlib.sha256(new_password.encode()).hexdigest(),new_money)
-
-    data=load("data.json")
 
     data.append(account.to_dict())
 
