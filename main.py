@@ -4,11 +4,12 @@ import json,hashlib,string
 from datetime import datetime
 
 class User:
-    def __init__(self,username,password,money,transactions=None):
+    def __init__(self,username,password,money,login_last,transactions=None):
         self.username=username
         self.password=password
         self.money=money
         self.transactions=transactions or []
+        self.login_last=login_last
 
     def to_dict(self):
         return self.__dict__
@@ -18,9 +19,8 @@ def load(file_name):
         with open(file_name,"r",encoding="utf-8") as file:
             data=json.load(file)
             return data
-    except FileNotFoundError:
-        print("File not found.")
-        return None
+    except (FileNotFoundError,json.JSONDecodeError):
+        return []
 
 def save(file_name,info):
     try:
@@ -30,11 +30,12 @@ def save(file_name,info):
         print("File not found")
 
 def validate_password():
+    #password for user michau: IamBoomer123!
     small_letters=string.ascii_lowercase
     great_letters=string.ascii_uppercase
     digits="1234567890"
     special="!@#$%^&*()-_+=|,./';[]{}:?><"
-    
+
     while True:
         changed_password=input("Insert new password: ").strip()
         if len(changed_password)<=8:
@@ -68,6 +69,8 @@ def login():
 
             if user["password"]==hashlib.sha256(password.encode()).hexdigest():
                 print("Login successful.")
+                print(f"Last login: {user['login_last']}")
+                user["login_last"]=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 user_menu(username)
                 return username
             else:
@@ -153,7 +156,7 @@ def deposit(username):
     while True:
         try:
             money_to_deposit=float(input("Insert a money to deposit: "))
-            if not money_to_deposit or money_to_deposit<=0:
+            if money_to_deposit<=0:
                 print("Please, insert valid amount.")
                 continue
             break
@@ -195,8 +198,6 @@ def change_password(username):
     print("2. New password should contain at least one: small letter, great letter, digit and special character.")
     print("3. Keep your password in safe place.")
     print()
-
-#password for user michau: IamBoomer234!
 
     changed_password=validate_password()
 
@@ -278,7 +279,7 @@ def register():
             print("An error occured. Try again!")
     
     #creating account
-    account=User(new_username,hashlib.sha256(new_password.encode()).hexdigest(),new_money)
+    account=User(new_username,hashlib.sha256(new_password.encode()).hexdigest(),new_money,login_last=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     data.append(account.to_dict())
 
