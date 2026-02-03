@@ -65,16 +65,32 @@ def login():
 
     for user in data:
         if user["username"]==username:
+
+            user.setdefault("failed_attempts",0)
+            user.setdefault("blocked",False)
+
+            if user["blocked"]:
+                print("Account is blocked after 3 failed login attempts.")
+                return None 
+            
             password=input("Insert password: ").strip()
 
             if user["password"]==hashlib.sha256(password.encode()).hexdigest():
                 print("Login successful.")
                 print(f"Last login: {user['login_last']}")
                 user["login_last"]=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                user["failed_attempts"]=0
+                save("data.json",data)
                 user_menu(username)
                 return username
             else:
-                print("Invalid password.")
+                user["failed_attempts"]+=1
+                if user["failed_attempts"]>=3:
+                    user["blocked"]=True
+                    print("Too many failed attempts. Account has been blocked.")
+                else:
+                    print(f"Invalid password. Attempts left: {3-user['failed_attempts']}")
+                save("data.json",data)
                 return None
 
     print("Username was not found.")
