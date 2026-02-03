@@ -1,0 +1,8 @@
+# Core language
+python>=3.10
+
+# Standard library modules (no external dependencies)
+# - json
+# - hashlib
+# - datetime
+# - string
