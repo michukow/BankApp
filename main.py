@@ -68,10 +68,23 @@ def login():
 
             user.setdefault("failed_attempts",0)
             user.setdefault("blocked",False)
+            user.setdefault("block_date",None)
 
             if user["blocked"]:
-                print("Account is blocked after 3 failed login attempts.")
-                return None 
+                if user["block_date"]:
+                    block_time=datetime.strptime(user["block_date"],"%Y-%m-%d %H:%M:%S")
+
+                    if datetime.now()-block_time>=timedelta(days=3):
+                        user["blocked"]=False
+                        user["failed_attempts"]=0
+                        user["block_date"]=None
+                        save("data.json", data)
+                    else:
+                        print("Account is blocked. Try again later.")
+                        return None
+            else:
+                print("Account is blocked.")
+                return None
             
             password=input("Insert password: ").strip()
 
@@ -87,6 +100,7 @@ def login():
                 user["failed_attempts"]+=1
                 if user["failed_attempts"]>=3:
                     user["blocked"]=True
+                    user["block_date"]=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     print("Too many failed attempts. Account has been blocked.")
                 else:
                     print(f"Invalid password. Attempts left: {3-user['failed_attempts']}")
