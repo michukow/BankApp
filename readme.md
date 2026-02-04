@@ -28,9 +28,9 @@ It is designed as a learning project that evolves step by step toward a real-wor
 - SHA-256 hashing algorithm
 - Account blocking after 3 failed login attempts
 - Failed login attempts are persisted between sessions
+- Temporary account lock with automatic unlock after 3-days
 
 ## 🚀 Planned Improvements
-- Temporary account lock with automatic unlock
 - Logging system (`logging` module)
 - Role-based access (admin / user)
 - Migration to SQL database
