@@ -1,12 +1,13 @@
 #BankApp
 
-import json,hashlib,string
-from datetime import datetime
+import json,hashlib,string,os
+from datetime import datetime,timedelta
 
 class User:
-    def __init__(self,username,password,money,login_last,transactions=None):
+    def __init__(self,username,password,money,login_last,transactions=None,salt=None):
         self.username=username
         self.password=password
+        self.salt=salt
         self.money=money
         self.transactions=transactions or []
         self.login_last=login_last
@@ -55,6 +56,15 @@ def validate_password():
             continue
         return changed_password
 
+def hash_password(password,salt=None):
+    if salt is None:
+        salt=os.urandom(16).hex()
+    hashed_password=hashlib.sha256((salt+password).encode()).hexdigest()
+    return hashed_password,salt
+
+def check_password(password,stored_hash,stored_salt):
+    return hashlib.sha256((stored_salt+password).encode()).hexdigest()==stored_hash
+
 def login():
     data=load("data.json") or []
 
@@ -82,13 +92,10 @@ def login():
                     else:
                         print("Account is blocked. Try again later.")
                         return None
-            else:
-                print("Account is blocked.")
-                return None
             
             password=input("Insert password: ").strip()
 
-            if user["password"]==hashlib.sha256(password.encode()).hexdigest():
+            if check_password(password,user["password"],user["salt"]):
                 print("Login successful.")
                 print(f"Last login: {user['login_last']}")
                 user["login_last"]=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -233,7 +240,9 @@ def change_password(username):
 
     for user in data:
         if user["username"]==username:
-            user["password"]=hashlib.sha256(changed_password.encode()).hexdigest()
+            hashed,salt=hash_password(changed_password)
+            user["password"]=hashed
+            user["salt"]=salt
             save("data.json",data)
             print("Password changed successfully.")
             return
@@ -309,7 +318,9 @@ def register():
             print("An error occured. Try again!")
     
     #creating account
-    account=User(new_username,hashlib.sha256(new_password.encode()).hexdigest(),new_money,login_last=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    hashed,salt=hash_password(new_password)
+
+    account=User(new_username,hashed,new_money,login_last=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),salt=salt)
 
     data.append(account.to_dict())
 
