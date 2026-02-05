@@ -223,10 +223,6 @@ def deposit(username):
 
 #change password
 def change_password(username):
-    small_letters=string.ascii_lowercase
-    great_letters=string.ascii_uppercase
-    digits="1234567890"
-    special="!@#$%^&*()-_+=|,./';[]{}:?><"
 
     data=load("data.json") or []
 
