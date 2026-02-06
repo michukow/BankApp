@@ -8,7 +8,7 @@ It is designed as a learning project that evolves step by step toward a real-wor
 
 ### Currently supported features:
 - User registration and login
-- Secure password hashing (SHA-256)
+- Secure password hashing (SHA-256) + SALT per user
 - Account balance management
 - Deposits and withdrawals
 - Transaction history
