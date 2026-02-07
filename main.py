@@ -23,6 +23,7 @@ def load(file_name):
     except (FileNotFoundError,json.JSONDecodeError):
         return []
 
+        
 def save(file_name,info):
     try:
         with open(file_name,"w",encoding="utf-8") as file:
