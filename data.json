@@ -1,8 +1,9 @@
 [
     {
-        "username": "michau",
+        "username": "michau1",
         "password": "285ce982e62b3d2edcc713ed73939e3203651b6abcba702e0d39d3f529b6427f",
         "money": 50.0,
+        "salt": "9354a1095a4535b1cf542b35391fca78",
         "login_last": "2026-02-02 00:00",
         "transactions": [
             {
@@ -18,13 +19,15 @@
                 "balance_after": 50.0
             }
         ],
-        "failed_attempts": 1,
-        "blocked": false
+        "failed_attempts": 2,
+        "blocked": false,
+        "block_date": null
     },
     {
         "username": "maja",
         "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
         "money": 200,
+        "salt": "022fab785a56ab79ddcfb358b6d71e58",
         "login_last": "2026-01-02 12:23",
         "transactions": [
             {
@@ -35,5 +38,15 @@
             }
         ]
     },
-    
+    {
+        "username": "iza7",
+        "password": "16a181bf6b7f9a63dd41b33fcada8ca4d86e4aa163f0b74273cfabcedcbc6d87",
+        "salt": "3fd9755ee40444152aad9749e53ff42e",
+        "money": 500.0,
+        "transactions": [],
+        "login_last": "2026-02-10 01:04:12",
+        "failed_attempts": 1,
+        "blocked": false,
+        "block_date": null
+    }
 ]

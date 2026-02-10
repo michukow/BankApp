@@ -1,5 +1,3 @@
-#BankApp
-
 import json,hashlib,string,os
 from datetime import datetime,timedelta
 
@@ -21,9 +19,9 @@ def load(file_name):
             data=json.load(file)
             return data
     except (FileNotFoundError,json.JSONDecodeError):
+        print(f"An error occured.")
         return []
 
-        
 def save(file_name,info):
     try:
         with open(file_name,"w",encoding="utf-8") as file:
@@ -63,8 +61,8 @@ def hash_password(password,salt=None):
     hashed_password=hashlib.sha256((salt+password).encode()).hexdigest()
     return hashed_password,salt
 
-def check_password(password,stored_hash,stored_salt):
-    return hashlib.sha256((stored_salt+password).encode()).hexdigest()==stored_hash
+def check_password(password,stored_hash,salt):
+    return hashlib.sha256((salt+password).encode()).hexdigest()==stored_hash
 
 def login():
     data=load("data.json") or []
@@ -317,7 +315,7 @@ def register():
     #creating account
     hashed,salt=hash_password(new_password)
 
-    account=User(new_username,hashed,new_money,login_last=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),salt=salt)
+    account=User(new_username,hashed,new_money,login_last=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),salt=os.urandom(16).hex())
 
     data.append(account.to_dict())
 
